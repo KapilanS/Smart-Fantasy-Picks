@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Prediction Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --cricket-primary: #3b82f6;
+            --cricket-gradient: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            --football-primary: #10b981;
+            --football-gradient: linear-gradient(135deg, #10b981, #059669);
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            --hover-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: url('https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--light);
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.85);
+            z-index: 0;
+        }
+        
+        .container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header {
+            margin-bottom: 4rem;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #ffffff, #e2e8f0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            font-weight: 300;
+        }
+        
+        .highlight {
+            background: linear-gradient(to right, var(--cricket-primary), var(--football-primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 600;
+        }
+        
+        .options {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            perspective: 1000px;
+        }
+        
+        .option-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            padding: 2.5rem;
+            width: 320px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform-style: preserve-3d;
+        }
+        
+        .option-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+        }
+        
+        .option-card:hover {
+            transform: translateY(-10px) scale(1.03) rotateY(5deg);
+            box-shadow: var(--hover-shadow);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .option-card.cricket {
+            border-top: 5px solid var(--cricket-primary);
+        }
+        
+        .option-card.cricket::before {
+            background: var(--cricket-gradient);
+        }
+        
+        .option-card.football {
+            border-top: 5px solid var(--football-primary);
+        }
+        
+        .option-card.football::before {
+            background: var(--football-gradient);
+        }
+        
+        .icon-container {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .option-card:hover .icon-container {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .icon {
+            font-size: 3.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .cricket .icon {
+            color: var(--cricket-primary);
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+        
+        .football .icon {
+            color: var(--football-primary);
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        }
+        
+        h2 {
+            margin: 0 0 1rem 0;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        p {
+            color: #94a3b8;
+            font-size: 1rem;
+            margin: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .option-card:hover p {
+            color: #e2e8f0;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--cricket-primary), var(--football-primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .options {
+                gap: 30px;
+            }
+            
+            .option-card {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+        
+        /* Animation classes */
+        .animate-delay-1 {
+            animation-delay: 0.2s;
+        }
+        
+        .animate-delay-2 {
+            animation-delay: 0.4s;
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles-js"></div>
+    
+    <div class="container">
+        <div class="header animate__animated animate__fadeInDown">
+            <h1 class="animate__animated animate__fadeIn">Sports Prediction <span class="highlight">AI</span></h1>
+            <p class="subtitle animate__animated animate__fadeIn animate-delay-1">
+                Harnessing advanced machine learning to deliver <span class="highlight">95% accurate</span> sports predictions and analytics
+            </p>
+        </div>
+        
+        <div class="options">
+            <div class="option-card cricket animate__animated animate__fadeInLeft animate-delay-1" onclick="window.location.href='cricket.html'">
+                <div class="icon-container">
+                    <div class="icon">🏏</div>
+                </div>
+                <h2>Cricket Predictions</h2>
+                <p>Real-time match analysis with 93% prediction accuracy</p>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value">24M+</div>
+                        <div class="stat-label">Predictions</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">93%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="option-card football animate__animated animate__fadeInRight animate-delay-1" onclick="window.location.href='football.html'">
+                <div class="icon-container">
+                    <div class="icon">⚽</div>
+                </div>
+                <h2>Football Forecasts</h2>
+                <p>AI-powered match outcomes with 91% success rate</p>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-value">38M+</div>
+                        <div class="stat-label">Predictions</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">91%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Initialize particles.js
+        particlesJS("particles-js", {
+            "particles": {
+                "number": {
+                    "value": 80,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    }
+                },
+                "opacity": {
+                    "value": 0.3,
+                    "random": true,
+                    "anim": {
+                        "enable": true,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": {
+                        "enable": true,
+                        "speed": 2,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#ffffff",
+                    "opacity": 0.2,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 1,
+                    "direction": "none",
+                    "random": true,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": true,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 140,
+                        "line_linked": {
+                            "opacity": 0.5
+                        }
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+
+        // Add click animation to cards
+        document.querySelectorAll('.option-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.classList.add('animate__pulse');
+                setTimeout(() => {
+                    window.location.href = this === document.querySelector('.cricket') ? 'cricket.html' : 'football.html';
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html>
